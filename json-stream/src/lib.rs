@@ -8,7 +8,7 @@ use wasm_bindgen::JsValue;
 pub fn parse_json_stream(stream: &str) -> JsValue {
     let res = json::Deserializer::from_str(stream)
         .into_iter()
-        .flat_map(|m| m)
+        .flatten()
         .collect::<Vec<json::Value>>();
 
     JsValue::from_serde(&res).unwrap()

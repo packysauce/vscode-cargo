@@ -98,7 +98,7 @@ export async function rm(cwd: string, pkg: string) {
 
 export async function search(name: string): Promise<Package[]> {
     let response = await fetch(`https://crates.io/api/v1/crates?per_page=20&q=${name}`);
-    let json: { crates: Package[] } = await response.json();
+    let json = await response.json() as { crates: Package[] };
 
     return json.crates;
 }

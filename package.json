@@ -1,18 +1,19 @@
 {
-    "name": "cargo",
+    "name": "vscode-cargo",
     "displayName": "Cargo",
     "description": "Integration with cargo and cargo tools",
     "version": "0.2.3",
     "publisher": "panicbit",
-    "repository": "https://github.com/panicbit/vscode-cargo",
+    "repository": "https://github.com/packysauce/vscode-cargo",
     "icon": "cargo.png",
     "engines": {
-        "vscode": "^1.20.0"
+        "vscode": "^1.74.0"
     },
     "categories": [
         "Other"
     ],
     "activationEvents": [
+        "onFileSystem:*/Cargo.toml",
         "onLanguage:rust",
         "onCommand:cargo.check",
         "onCommand:cargo.build",
@@ -55,20 +56,24 @@
         "vscode:prepublish": "npm run compile",
         "cargo": "cd json-stream && wasm-pack build --target nodejs",
         "compile": "npm run cargo && npx tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
-        "@types/mocha": "^2.2.42",
+        "@types/glob": "8.0.1",
+        "@types/mocha": "2.2.48",
         "@types/node": "^7.10.9",
-        "tslint": "^5.20.1",
-        "typescript": "^3.7",
-        "vscode": "^1.1.36"
+        "@types/node-fetch": "2.6.2",
+        "@types/vscode": "1.74.0",
+        "@typescript-eslint/eslint-plugin": "^5.50.0",
+        "@typescript-eslint/parser": "^5.50.0",
+        "@vscode/test-electron": "2.2.3",
+        "glob": "8.1.0",
+        "mocha": "10.2.0",
+        "prettier": "2.8.3",
+        "typescript": "4.9.5"
     },
     "dependencies": {
         "json-stream": "file:./json-stream/pkg",
-        "@types/node-fetch": "^1.6.9",
-        "node-fetch": "^2.6.0"
+        "node-fetch": "3.3.0"
     }
 }
