@@ -14,15 +14,21 @@ export async function activate(context: vscode.ExtensionContext) {
   // quick debug alert to say howdy
   vscode.window.showInformationMessage("howdy!");
 
-  vscode.workspace.onDidSaveTextDocument((_document) => {
-    if (config.automaticCheck()) {
-      vscode.commands.executeCommand("cargo.check");
+  // load metadata with progress bar
+  let metadata = await vscode.window.withProgress(
+    { location: vscode.ProgressLocation.Window },
+    async (progress) => {
+      progress.report({ message: "Running 'cargo metadata'" });
+      return await cargo.metadata(util.getCwd());
     }
-  });
+  );
 
+  // view container
+  const tree = new cargo.CargoTreeDataProvider(metadata);
   const cargo_diags = vscode.languages.createDiagnosticCollection("cargo");
   context.subscriptions.push(
     cargo_diags,
+    vscode.window.registerTreeDataProvider("cargo", tree),
     vscode.commands.registerCommand("cargo.check", async () =>
       with_cargo_diagnostics(cargo_diags, "cargo check", cargo.check)
     ),
@@ -39,7 +45,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
       let packages = await cargo.search(input);
       let items = packages.map(
-        (pkg: cargo.Package): vscode.QuickPickItem => ({
+        (pkg: cargo.SearchResult): vscode.QuickPickItem => ({
           label: pkg.name,
           detail: `All-time DLs: ${pkg.downloads} Recent DLs: ${pkg.recent_downloads}`,
           description: `(${pkg.max_version}) ${pkg.description}`,
