@@ -12,16 +12,25 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [
-        "onFileSystem:*/Cargo.toml",
-        "onLanguage:rust",
-        "onCommand:cargo.check",
-        "onCommand:cargo.build",
-        "onCommand:cargo.add",
-        "onCommand:cargo.rm"
-    ],
     "main": "./out/extension",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "cargo",
+                    "title": "Cargo",
+                    "icon": "rust-logo.svg"
+                }
+            ]
+        },
+        "views": {
+            "cargo": [
+                {
+                    "id": "cargo",
+                    "name": "Cargo View"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "cargo.check",
@@ -52,6 +61,10 @@
             }
         }
     },
+    "activationEvents": [
+        "workspaceContains:*/Cargo.toml",
+        "onLanguage:rust"
+    ],
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "cargo": "cd json-stream && wasm-pack build --target nodejs",
